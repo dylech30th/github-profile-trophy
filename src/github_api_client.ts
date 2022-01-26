@@ -27,13 +27,13 @@ export class GithubAPIClient {
   async requestOrganizationStargazer(username: string, token: string | undefined): Promise<number> {
     let count = 0;
     const response = await this.restAPIRequest("https://api.github.com/user/orgs", token);
-    for (var data in response) {
+    for (var data in response.data) {
       const url = response[data].repos_url;
       const repoInfo = await this.restAPIRequest(`${url}?per_page=100`, token);
-      for (var repo in repoInfo) {
+      for (var repo in repoInfo.data) {
         const contributorUrl = repoInfo[repo].contributors_url;
         const contributorInfo = await this.restAPIRequest(contributorUrl, token);
-        for (var contributor in contributorInfo) {
+        for (var contributor in contributorInfo.data) {
           if (contributorInfo[contributor].login == username) {
             count += repoInfo[repo].stargazers_count;
           }
@@ -125,7 +125,7 @@ export class GithubAPIClient {
     return await this.request(query, token, username);
   }
 
-  private async restAPIRequest(url: string, token: string | undefined): Promise<string> {
+  private async restAPIRequest(url: string, token: string | undefined) {
       return soxa.get(url, {
         headers: { Authorization: `bearer ${token}`, Accept: `application/vnd.github.v3+json` }
       })
