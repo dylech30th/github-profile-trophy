@@ -25,7 +25,8 @@ export class GithubAPIClient {
   }
 
   async requestOrganizationStargazer(username: string, token: string | undefined): Promise<number> {
-    let count = 1000;
+    let count = 0;
+    console.log(await this.restAPIRequest("https://api.github.com/user/orgs", token));
     const response = JSON.parse(await this.restAPIRequest("https://api.github.com/user/orgs", token));
     for (var data in response) {
       const url = response[data].repos_url;
