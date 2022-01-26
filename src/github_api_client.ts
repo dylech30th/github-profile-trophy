@@ -23,6 +23,26 @@ export class GithubAPIClient {
     ]);
     return new UserInfo(results[0]!, results[1]!, results[2]!, results[3]!);
   }
+
+  async requestOrganizationStargazer(username: string, token: string): Promise<number> {
+    let count = 0;
+    const response = JSON.parse(await this.restAPIRequest("https://api.github.com/user/orgs", token));
+    for (var data in response) {
+      const url = response[data].repos_url;
+      const repoInfo = JSON.parse(await this.restAPIRequest(`${url}?per_page=100`, token));
+      for (var repo in repoInfo) {
+        const contributorUrl = repoInfo[repo].contributors_url;
+        const contributorInfo = JSON.parse(await this.restAPIRequest(contributorUrl, token))
+        for (var contributor in contributorInfo) {
+          if (contributorInfo[contributor].login == username) {
+            count += repoInfo[repo].stargazers_count;
+          }
+        }
+      }
+    }
+    return count;
+  }
+
   private async requestUserActivity(
     token: string | undefined,
     username: string,
@@ -104,6 +124,13 @@ export class GithubAPIClient {
         `;
     return await this.request(query, token, username);
   }
+
+  private async restAPIRequest(url: string, token: string): Promise<string> {
+      return soxa.get(url, {
+        headers: { Authorization: `bearer ${token}`, Accept: `application/vnd.github.v3+json` }
+      })
+  }
+
   private async request(
     query: string,
     token: string | undefined,

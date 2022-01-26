@@ -18,10 +18,10 @@ import { RANK_ORDER, RANK } from "./utils.ts";
 
 export class TrophyList {
   private trophies = new Array<Trophy>();
-  constructor(userInfo: UserInfo) {
+  constructor(userInfo: UserInfo, organizationStargazers: number) {
     // Base trophies
     this.trophies.push(
-      new TotalStarTrophy(userInfo.totalStargazers),
+      new TotalStarTrophy(userInfo.totalStargazers + organizationStargazers),
       new TotalCommitTrophy(userInfo.totalCommits),
       new TotalFollowerTrophy(userInfo.totalFollowers),
       new TotalIssueTrophy(userInfo.totalIssues),

@@ -35,10 +35,10 @@ export default async (req: ServerRequest) => {
   );
   const titles: Array<string> = params.getAll("title").flatMap((r) =>
     r.split(",")
-  ).map((r) => r.trim());
+  ).map((r: string) => r.trim());
   const ranks: Array<string> = params.getAll("rank").flatMap((r) =>
     r.split(",")
-  ).map((r) => r.trim());
+  ).map((r: string) => r.trim());
 
   if (username === null) {
     req.respond(
@@ -62,6 +62,7 @@ export default async (req: ServerRequest) => {
     );
     return;
   }
+  const orgStargazers = await client.requestOrganizationStargazer(username, token)
   // Success Response
   req.respond(
     {
@@ -75,7 +76,7 @@ export default async (req: ServerRequest) => {
         paddingHeight,
         noBackground,
         noFrame,
-      ).render(userInfo, theme),
+      ).render(userInfo, orgStargazers, theme),
       headers: new Headers(
         {
           "Content-Type": "image/svg+xml",

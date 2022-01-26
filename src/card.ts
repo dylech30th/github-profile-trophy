@@ -22,9 +22,10 @@ export class Card {
   }
   render(
     userInfo: UserInfo,
+    organizationStargazers: number,
     theme: Theme,
   ): string {
-    const trophyList = new TrophyList(userInfo);
+    const trophyList = new TrophyList(userInfo, organizationStargazers);
 
     trophyList.filterByHideen();
 
