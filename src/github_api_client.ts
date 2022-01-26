@@ -125,7 +125,7 @@ export class GithubAPIClient {
     return await this.request(query, token, username);
   }
 
-  private async restAPIRequest(url: string, token: string): Promise<string> {
+  private async restAPIRequest(url: string, token: string | undefined): Promise<string> {
       return soxa.get(url, {
         headers: { Authorization: `bearer ${token}`, Accept: `application/vnd.github.v3+json` }
       })
