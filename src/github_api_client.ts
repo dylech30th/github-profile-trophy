@@ -26,14 +26,13 @@ export class GithubAPIClient {
 
   async requestOrganizationStargazer(username: string, token: string | undefined): Promise<number> {
     let count = 0;
-    console.log(await this.restAPIRequest("https://api.github.com/user/orgs", token));
-    const response = JSON.parse(await this.restAPIRequest("https://api.github.com/user/orgs", token));
+    const response = await this.restAPIRequest("https://api.github.com/user/orgs", token);
     for (var data in response) {
       const url = response[data].repos_url;
-      const repoInfo = JSON.parse(await this.restAPIRequest(`${url}?per_page=100`, token));
+      const repoInfo = await this.restAPIRequest(`${url}?per_page=100`, token);
       for (var repo in repoInfo) {
         const contributorUrl = repoInfo[repo].contributors_url;
-        const contributorInfo = JSON.parse(await this.restAPIRequest(contributorUrl, token))
+        const contributorInfo = await this.restAPIRequest(contributorUrl, token);
         for (var contributor in contributorInfo) {
           if (contributorInfo[contributor].login == username) {
             count += repoInfo[repo].stargazers_count;
