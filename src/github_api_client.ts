@@ -37,7 +37,7 @@ export class GithubAPIClient {
         const contributorInfo = await this.restAPIRequest(contributorUrl, token);
         for (var contributor in contributorInfo.data) {
           if (contributorInfo.data[contributor].login == username) {
-            count += repoInfo[repo].stargazers_count;
+            count += repoInfo.data[repo].stargazers_count;
           }
         }
       }
