@@ -24,7 +24,7 @@ export class GithubAPIClient {
     return new UserInfo(results[0]!, results[1]!, results[2]!, results[3]!);
   }
 
-  async requestOrganizationStargazer(username: string, token: string): Promise<number> {
+  async requestOrganizationStargazer(username: string, token: string | undefined): Promise<number> {
     let count = 0;
     const response = JSON.parse(await this.restAPIRequest("https://api.github.com/user/orgs", token));
     for (var data in response) {
