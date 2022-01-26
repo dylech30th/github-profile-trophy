@@ -30,13 +30,13 @@ export class GithubAPIClient {
     console.log(response.data == undefined);
     console.log(typeof response);
     for (var data in response.data) {
-      const url = response[data].repos_url;
+      const url = response.data[data].repos_url;
       const repoInfo = await this.restAPIRequest(`${url}?per_page=100`, token);
       for (var repo in repoInfo.data) {
-        const contributorUrl = repoInfo[repo].contributors_url;
+        const contributorUrl = repoInfo.data[repo].contributors_url;
         const contributorInfo = await this.restAPIRequest(contributorUrl, token);
         for (var contributor in contributorInfo.data) {
-          if (contributorInfo[contributor].login == username) {
+          if (contributorInfo.data[contributor].login == username) {
             count += repoInfo[repo].stargazers_count;
           }
         }
